@@ -75,11 +75,11 @@ func Request(method string, uri string, payload Payload, apiKey string, apiSecre
 
 
 	response, err := client.Do(request)
+	defer seg.Close(nil)
 	if err != nil {
 		return err
 	}
 	defer response.Body.Close()
-	defer seg.Close(nil)
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return err
