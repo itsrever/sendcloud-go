@@ -1,6 +1,7 @@
 package integration
 
 import (
+	"context"
 	"github.com/itsrever/sendcloud-go"
 	"strconv"
 )
@@ -20,7 +21,7 @@ func New(apiKey string, apiSecret string) *Client {
 // List all integrations the the account
 func (c *Client) GetIntegrations() ([]*sendcloud.Integration, error) {
 	ilrc := sendcloud.IntegrationListResponseContainer{}
-	err := sendcloud.Request("GET", "/api/v2/integrations", nil, c.apiKey, c.apiSecret, &ilrc)
+	err := sendcloud.Request(context.TODO(), "GET", "/api/v2/integrations", nil, c.apiKey, c.apiSecret, &ilrc)
 	if err != nil {
 		return nil, err
 	}
@@ -31,7 +32,7 @@ func (c *Client) GetIntegrations() ([]*sendcloud.Integration, error) {
 // Update an existing integration
 func (c *Client) UpdateIntegration(params *sendcloud.IntegrationParams) (*sendcloud.Integration, error) {
 	ilrc := sendcloud.IntegrationResponseContainer{}
-	err := sendcloud.Request("PUT", "/api/v2/integrations/"+strconv.Itoa(int(params.ID)), params, c.apiKey, c.apiSecret, &ilrc)
+	err := sendcloud.Request(context.TODO(), "PUT", "/api/v2/integrations/"+strconv.Itoa(int(params.ID)), params, c.apiKey, c.apiSecret, &ilrc)
 	if err != nil {
 		return nil, err
 	}

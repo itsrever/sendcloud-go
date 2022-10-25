@@ -1,6 +1,7 @@
 package servicepoint
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"github.com/itsrever/sendcloud-go"
@@ -58,7 +59,7 @@ func (service Client) GetServicePoint(servicePoint Matcher) (int, error) {
 	uri.RawQuery = paramsContainer.Encode()
 
 	servicePoints := sendcloud.ServicePointList{}
-	if err := sendcloud.Request("GET", uri.String(), nil, service.apiKey, service.apiSecret, &servicePoints); err != nil {
+	if err := sendcloud.Request(context.TODO(), "GET", uri.String(), nil, service.apiKey, service.apiSecret, &servicePoints); err != nil {
 		return 0, err
 	}
 
