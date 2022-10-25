@@ -71,14 +71,15 @@ func Request(method string, uri string, payload Payload, apiKey string, apiSecre
 
 	client := xray.Client(nil)
 	ctx, seg := xray.BeginSegment(context.TODO(), "sendcloud.httpRequest")
-	request.WithContext(ctx)
-	defer seg.Close(nil)
+	request = request.WithContext(ctx)
+
 
 	response, err := client.Do(request)
 	if err != nil {
 		return err
 	}
 	defer response.Body.Close()
+	defer seg.Close(nil)
 	body, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		return err
