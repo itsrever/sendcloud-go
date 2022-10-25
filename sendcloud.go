@@ -6,10 +6,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/aws/aws-xray-sdk-go/xray"
 
