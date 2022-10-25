@@ -2,9 +2,11 @@ package sendcloud
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"strings"
 	"time"
@@ -42,9 +44,8 @@ func (e *Error) Error() string {
 
 //Send a request to Sendcloud with given method, path, payload and credentials
 func Request(method string, uri string, payload Payload, apiKey string, apiSecret string, r Response) error {
-	client := xray.Client(&http.Client{
-		Timeout: 10 * time.Second,
-		})
+
+
 	var request *http.Request
 	var err error
 
@@ -69,6 +70,11 @@ func Request(method string, uri string, payload Payload, apiKey string, apiSecre
 	}
 	request.Header.Set("User-Agent", "Sendcloud-Go/0.1 ("+apiKey+")")
 	request.SetBasicAuth(apiKey, apiSecret)
+
+	client := xray.Client(nil)
+	ctx, seg := xray.BeginSegment(context.TODO(), "sendcloud.httpRequest")
+	request.WithContext(ctx)
+	defer seg.Close(nil)
 
 	response, err := client.Do(request)
 	if err != nil {
