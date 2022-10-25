@@ -1,6 +1,7 @@
 package parcel
 
 import (
+	"context"
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/hex"
@@ -23,9 +24,9 @@ func New(apiKey string, apiSecret string) *Client {
 }
 
 // Create a new parcel
-func (c *Client) New(params *sendcloud.ParcelParams) (*sendcloud.Parcel, error) {
+func (c *Client) New(ctx context.Context, params *sendcloud.ParcelParams) (*sendcloud.Parcel, error) {
 	parcel := sendcloud.ParcelResponseContainer{}
-	err := sendcloud.Request("POST", "/api/v2/parcels", params, c.apiKey, c.apiSecret, &parcel)
+	err := sendcloud.Request(ctx, "POST", "/api/v2/parcels", params, c.apiKey, c.apiSecret, &parcel)
 
 	if err != nil {
 		return nil, err
@@ -35,9 +36,9 @@ func (c *Client) New(params *sendcloud.ParcelParams) (*sendcloud.Parcel, error) 
 }
 
 // Return a single parcel
-func (c *Client) Get(parcelID int64) (*sendcloud.Parcel, error) {
+func (c *Client) Get(ctx context.Context, parcelID int64) (*sendcloud.Parcel, error) {
 	parcel := sendcloud.ParcelResponseContainer{}
-	err := sendcloud.Request("GET", "/api/v2/parcels/"+strconv.Itoa(int(parcelID)), nil, c.apiKey, c.apiSecret, &parcel)
+	err := sendcloud.Request(ctx, "GET", "/api/v2/parcels/"+strconv.Itoa(int(parcelID)), nil, c.apiKey, c.apiSecret, &parcel)
 
 	if err != nil {
 		return nil, err
@@ -47,9 +48,9 @@ func (c *Client) Get(parcelID int64) (*sendcloud.Parcel, error) {
 }
 
 // Get a label as bytes based on the url that references the PDF
-func (c *Client) GetLabel(labelURL string) ([]byte, error) {
+func (c *Client) GetLabel(ctx context.Context, labelURL string) ([]byte, error) {
 	data := &sendcloud.LabelData{}
-	err := sendcloud.Request("GET", labelURL, nil, c.apiKey, c.apiSecret, data)
+	err := sendcloud.Request(ctx, "GET", labelURL, nil, c.apiKey, c.apiSecret, data)
 	if err != nil {
 		return nil, err
 	}

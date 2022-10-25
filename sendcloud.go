@@ -41,7 +41,7 @@ func (e *Error) Error() string {
 }
 
 //Send a request to Sendcloud with given method, path, payload and credentials
-func Request(method string, uri string, payload Payload, apiKey string, apiSecret string, r Response) error {
+func Request(ctx context.Context, method string, uri string, payload Payload, apiKey string, apiSecret string, r Response) error {
 
 
 	var request *http.Request
@@ -70,12 +70,10 @@ func Request(method string, uri string, payload Payload, apiKey string, apiSecre
 	request.SetBasicAuth(apiKey, apiSecret)
 
 	client := xray.Client(nil)
-	ctx, seg := xray.BeginSegment(context.TODO(), "sendcloud.httpRequest")
 	request = request.WithContext(ctx)
 
 
 	response, err := client.Do(request)
-	defer seg.Close(nil)
 	if err != nil {
 		return err
 	}
