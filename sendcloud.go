@@ -8,9 +8,9 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-xray-sdk-go/xray"
-
 )
 
 type Payload interface {
@@ -40,10 +40,11 @@ func (e *Error) Error() string {
 	return fmt.Sprintf("request %s resulted in error code %d: %s", e.Request, e.Code, e.Message)
 }
 
-//Send a request to Sendcloud with given method, path, payload and credentials
+// Send a request to Sendcloud with given method, path, payload and credentials
 func Request(ctx context.Context, method string, uri string, payload Payload, apiKey string, apiSecret string, r Response) error {
-
-
+	client := &http.Client{
+		Timeout: 10 * time.Second,
+	}
 	var request *http.Request
 	var err error
 
@@ -69,11 +70,10 @@ func Request(ctx context.Context, method string, uri string, payload Payload, ap
 	request.Header.Set("User-Agent", "Sendcloud-Go/0.1 ("+apiKey+")")
 	request.SetBasicAuth(apiKey, apiSecret)
 
-	client := xray.Client(nil)
+	xrayClient := xray.Client(client)
 	request = request.WithContext(ctx)
 
-
-	response, err := client.Do(request)
+	response, err := xrayClient.Do(request)
 	if err != nil {
 		return err
 	}
