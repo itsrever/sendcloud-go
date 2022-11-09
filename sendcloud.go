@@ -100,11 +100,13 @@ func Request(ctx context.Context, method string, uri string, payload Payload, ap
 	return err
 }
 
-//Return the full URL
+// Return the full URL
 func getUrl(uri string) string {
 	var url string
 	if strings.HasPrefix(uri, "https://") {
 		url = uri
+	} else if strings.HasPrefix(uri, "/") {
+		url = "https://panel.sendcloud.sc" + uri
 	} else {
 		url = "https://panel.sendcloud.sc/" + uri
 	}
