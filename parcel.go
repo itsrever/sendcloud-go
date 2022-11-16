@@ -44,6 +44,7 @@ type Parcel struct {
 	Method         int64       `json:"method"`
 	PhoneNumber    *string     `json:"phone_number"`
 	TrackingNumber string      `json:"tracking_number"`
+	TrackingURL    string      `json:"tracking_url"`
 	ServicePointID *int64      `json:"to_service_point"`
 	Weight         string      `json:"weight"`
 	Label          string      `json:"label"`
@@ -118,6 +119,7 @@ type ParcelResponse struct {
 	ToServicePointID    *int64          `json:"to_service_point"`
 	Telephone           *string         `json:"telephone"`
 	TrackingNumber      string          `json:"tracking_number"`
+	TrackingURL         string          `json:"tracking_url"`
 	Weight              string          `json:"weight"`
 	Label               LabelResponse   `json:"label"`
 	OrderNumber         string          `json:"order_number"`
@@ -156,7 +158,7 @@ type Status struct {
 	Message string `json:"message"`
 }
 
-//Translate the params into an actual request body
+// Translate the params into an actual request body
 func (p *ParcelParams) GetPayload() interface{} {
 	parcel := ParcelRequest{
 		Name:         p.Name,
@@ -197,7 +199,7 @@ func (p *ParcelParams) GetPayload() interface{} {
 	return ar
 }
 
-//Handle the response and return it as a Parcel{}
+// Handle the response and return it as a Parcel{}
 func (p *ParcelResponseContainer) GetResponse() interface{} {
 	parcel := Parcel{
 		ID:             p.Parcel.ID,
@@ -215,6 +217,7 @@ func (p *ParcelResponseContainer) GetResponse() interface{} {
 		CountryCode:    p.Parcel.Country.Iso2,
 		PhoneNumber:    p.Parcel.Telephone,
 		TrackingNumber: p.Parcel.TrackingNumber,
+		TrackingURL:    p.Parcel.TrackingURL,
 		ServicePointID: p.Parcel.ToServicePointID,
 		Label:          p.Parcel.Label.LabelPrinter,
 		OrderNumber:    p.Parcel.OrderNumber,
@@ -232,7 +235,7 @@ func (p *ParcelResponseContainer) GetResponse() interface{} {
 	return &parcel
 }
 
-//Set the response
+// Set the response
 func (p *ParcelResponseContainer) SetResponse(body []byte) error {
 	err := json.Unmarshal(body, &p)
 	if err != nil {
@@ -241,12 +244,12 @@ func (p *ParcelResponseContainer) SetResponse(body []byte) error {
 	return nil
 }
 
-//Get formatted response
+// Get formatted response
 func (l LabelData) GetResponse() interface{} {
 	return l
 }
 
-//Set the response
+// Set the response
 func (l *LabelData) SetResponse(body []byte) error {
 	*l = body
 	return nil
