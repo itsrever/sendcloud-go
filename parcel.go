@@ -31,6 +31,7 @@ type Parcel struct {
 	ID             int64  `json:"id"`
 	TrackingNumber string `json:"tracking_number"`
 	TrackingURL    string `json:"tracking_url"`
+	Label          string `json:"label"`
 }
 
 type ParcelRequestContainer struct {
@@ -150,6 +151,7 @@ func (p *ParcelResponseContainer) GetResponse() interface{} {
 		ID:             p.Parcel.ID,
 		TrackingNumber: p.Parcel.TrackingNumber,
 		TrackingURL:    p.Parcel.TrackingURL,
+		Label:          p.Parcel.Label.LabelPrinter,
 	}
 
 	return &parcel
