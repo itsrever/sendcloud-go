@@ -5,10 +5,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/aws/aws-xray-sdk-go/xray"
 	"io"
 	"net/http"
 	"strings"
+
+	"github.com/aws/aws-xray-sdk-go/xray"
 )
 
 type Payload interface {

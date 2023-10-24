@@ -2,13 +2,9 @@ package parcel
 
 import (
 	"context"
-	"crypto/hmac"
-	"crypto/sha256"
-	"encoding/hex"
-	"encoding/json"
-	"errors"
-	"github.com/itsrever/sendcloud-go"
 	"strconv"
+
+	"github.com/itsrever/sendcloud-go"
 )
 
 type Client struct {
@@ -55,23 +51,4 @@ func (c *Client) GetLabel(ctx context.Context, labelURL string) ([]byte, error) 
 		return nil, err
 	}
 	return *data, nil
-}
-
-// Validate and read the incoming webhook
-func (c *Client) ReadParcelWebhook(payload []byte, signature string) (*sendcloud.Parcel, error) {
-	hash := hmac.New(sha256.New, []byte(c.apiSecret))
-	hash.Write(payload)
-
-	expectedSignature := hex.EncodeToString(hash.Sum(nil))
-	if signature != expectedSignature {
-		return nil, errors.New("invalid signature")
-	}
-
-	parcelResponse := sendcloud.ParcelResponseContainer{}
-	err := json.Unmarshal(payload, &parcelResponse)
-	if err != nil {
-		return nil, err
-	}
-
-	return parcelResponse.GetResponse().(*sendcloud.Parcel), nil
 }
