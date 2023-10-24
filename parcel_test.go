@@ -56,20 +56,16 @@ func TestGetResponse(t *testing.T) {
 			Name: "Should include weight",
 			Response: sendcloud.ParcelResponseContainer{
 				Parcel: sendcloud.ParcelResponse{
-					Weight: "0.05",
+					ID: 1233,
 				},
 			},
 			Out: sendcloud.Parcel{
-				Weight: "0.05",
+				ID: 1233,
 			},
 		},
 	}
 	for _, test := range tests {
 		res := test.Response.GetResponse()
-		if test.Response.Parcel.Weight != "" {
-			assert.Equal(t, test.Out.Weight, res.(*sendcloud.Parcel).Weight, test.Name)
-		} else {
-			assert.Equal(t, res.(*sendcloud.Parcel).Weight, "", test.Name)
-		}
+		assert.Equal(t, test.Out.ID, res.(*sendcloud.Parcel).ID, test.Name)
 	}
 }

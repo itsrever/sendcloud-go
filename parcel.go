@@ -2,7 +2,6 @@ package sendcloud
 
 import (
 	"encoding/json"
-	"time"
 )
 
 type LabelData []byte
@@ -29,31 +28,9 @@ type ParcelParams struct {
 }
 
 type Parcel struct {
-	ID             int64       `json:"id"`
-	ExternalID     *string     `json:"external_id"`
-	Name           string      `json:"name"`
-	CompanyName    string      `json:"company_name"`
-	Email          string      `json:"email"`
-	Street         string      `json:"street"`
-	HouseNumber    string      `json:"house_number"`
-	Address        string      `json:"address"`
-	Address2       string      `json:"address_2"`
-	City           string      `json:"city"`
-	PostalCode     string      `json:"postal_code"`
-	CountryCode    string      `json:"country_code"`
-	Method         int64       `json:"method"`
-	PhoneNumber    *string     `json:"phone_number"`
-	TrackingNumber string      `json:"tracking_number"`
-	TrackingURL    string      `json:"tracking_url"`
-	ServicePointID *int64      `json:"to_service_point"`
-	Weight         string      `json:"weight"`
-	Label          string      `json:"label"`
-	OrderNumber    string      `json:"order_number"`
-	IsReturn       bool        `json:"is_return"`
-	Note           *string     `json:"note"`
-	CarrierCode    string      `json:"carrier"`
-	Data           interface{} `json:"data"`
-	CreatedAt      time.Time   `json:"created_at"`
+	ID             int64  `json:"id"`
+	TrackingNumber string `json:"tracking_number"`
+	TrackingURL    string `json:"tracking_url"`
 }
 
 type ParcelRequestContainer struct {
@@ -101,42 +78,10 @@ type LabelResponse struct {
 }
 
 type ParcelResponse struct {
-	ID                  int64           `json:"id"`
-	Address             string          `json:"address"`
-	Address2            string          `json:"address_2"`
-	AddressDivided      AddressDivided  `json:"address_divided"`
-	City                string          `json:"city"`
-	CompanyName         string          `json:"company_name"`
-	Country             CountryResponse `json:"country"`
-	Data                interface{}     `json:"data"`
-	DateCreated         string          `json:"date_created"`
-	Email               string          `json:"email"`
-	Name                string          `json:"name"`
-	PostalCode          string          `json:"postal_code"`
-	Reference           string          `json:"reference"`
-	Shipment            Shipment        `json:"shipment"`
-	Status              Status          `json:"status"`
-	ToServicePointID    *int64          `json:"to_service_point"`
-	Telephone           *string         `json:"telephone"`
-	TrackingNumber      string          `json:"tracking_number"`
-	TrackingURL         string          `json:"tracking_url"`
-	Weight              string          `json:"weight"`
-	Label               LabelResponse   `json:"label"`
-	OrderNumber         string          `json:"order_number"`
-	InsuredValue        int64           `json:"insured_value"`
-	TotalInsuredValue   int64           `json:"total_insured_value"`
-	ToState             interface{}     `json:"to_state"`
-	CustomsInvoiceNr    string          `json:"customs_invoice_nr"`
-	CustomsShipmentType interface{}     `json:"customs_shipment_type"`
-	Type                interface{}     `json:"type"`
-	ShipmentUUID        *string         `json:"shipment_uuid"`
-	ShippingMethod      int64           `json:"shipping_method"`
-	ExternalOrderID     *string         `json:"external_order_id"`
-	ExternalShipmentID  *string         `json:"external_shipment_id"`
-	ExternalReference   *string         `json:"external_reference"`
-	IsReturn            bool            `json:"is_return"`
-	Note                *string         `json:"note"`
-	Carrier             Carrier         `json:"carrier"`
+	ID             int64         `json:"id"`
+	TrackingNumber string        `json:"tracking_number"`
+	TrackingURL    string        `json:"tracking_url"`
+	Label          LabelResponse `json:"label"`
 }
 
 type Carrier struct {
@@ -203,34 +148,9 @@ func (p *ParcelParams) GetPayload() interface{} {
 func (p *ParcelResponseContainer) GetResponse() interface{} {
 	parcel := Parcel{
 		ID:             p.Parcel.ID,
-		ExternalID:     p.Parcel.ExternalReference,
-		Name:           p.Parcel.Name,
-		CompanyName:    p.Parcel.CompanyName,
-		Email:          p.Parcel.Email,
-		Street:         p.Parcel.AddressDivided.Street,
-		HouseNumber:    p.Parcel.AddressDivided.HouseNumber,
-		Address:        p.Parcel.Address,
-		Address2:       p.Parcel.Address2,
-		City:           p.Parcel.City,
-		Method:         p.Parcel.Shipment.ID,
-		PostalCode:     p.Parcel.PostalCode,
-		CountryCode:    p.Parcel.Country.Iso2,
-		PhoneNumber:    p.Parcel.Telephone,
 		TrackingNumber: p.Parcel.TrackingNumber,
 		TrackingURL:    p.Parcel.TrackingURL,
-		ServicePointID: p.Parcel.ToServicePointID,
-		Label:          p.Parcel.Label.LabelPrinter,
-		OrderNumber:    p.Parcel.OrderNumber,
-		IsReturn:       p.Parcel.IsReturn,
-		Note:           p.Parcel.Note,
-		CarrierCode:    p.Parcel.Carrier.Code,
-		Data:           p.Parcel.Data,
-		Weight:         p.Parcel.Weight,
 	}
-
-	layout := "02-01-2006 15:04:05"
-	createdAt, _ := time.Parse(layout, p.Parcel.DateCreated)
-	parcel.CreatedAt = createdAt
 
 	return &parcel
 }

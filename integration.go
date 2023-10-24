@@ -61,45 +61,7 @@ func (i *IntegrationParams) GetPayload() interface{} {
 	}
 }
 
-//Get formatted response
-func (i *IntegrationListResponseContainer) GetResponse() interface{} {
-	var integrations []*Integration
-	for _, r := range *i {
-		integration := Integration{
-			ID:                    r.ID,
-			Name:                  r.ShopName,
-			URL:                   r.ShopURL,
-			Type:                  r.System,
-			IsServicePointEnabled: r.ServicePointEnabled,
-			ServicePointCarriers:  r.ServicePointCarriers,
-			IsWebhooksEnabled:     r.ServicePointEnabled,
-			WebhookURL:            r.WebhookURL,
-			UpdatedAt:             r.LastUpdatedAt,
-		}
-		integrations = append(integrations, &integration)
-	}
-
-	return integrations
-}
-
-//Get formatted response
-func (r *IntegrationResponseContainer) GetResponse() interface{} {
-	integration := &Integration{
-		ID:                    r.ID,
-		Name:                  r.ShopName,
-		URL:                   r.ShopURL,
-		Type:                  r.System,
-		IsServicePointEnabled: r.ServicePointEnabled,
-		ServicePointCarriers:  r.ServicePointCarriers,
-		IsWebhooksEnabled:     r.ServicePointEnabled,
-		WebhookURL:            r.WebhookURL,
-		UpdatedAt:             r.LastUpdatedAt,
-	}
-
-	return integration
-}
-
-//Set the response
+// Set the response
 func (r *IntegrationResponseContainer) SetResponse(body []byte) error {
 	err := json.Unmarshal(body, &r)
 	if err != nil {
@@ -108,7 +70,7 @@ func (r *IntegrationResponseContainer) SetResponse(body []byte) error {
 	return nil
 }
 
-//Set the response
+// Set the response
 func (i *IntegrationListResponseContainer) SetResponse(body []byte) error {
 	err := json.Unmarshal(body, &i)
 	if err != nil {

@@ -1,26 +1,14 @@
 package client
 
 import (
-	"github.com/itsrever/sendcloud-go/integration"
-	"github.com/itsrever/sendcloud-go/method"
 	"github.com/itsrever/sendcloud-go/parcel"
-	"github.com/itsrever/sendcloud-go/sender"
-	"github.com/itsrever/sendcloud-go/servicepoint"
 )
 
 type API struct {
-	Parcel       *parcel.Client
-	Method       *method.Client
-	Sender       *sender.Client
-	ServicePoint *servicepoint.Client
-	Integration  *integration.Client
+	Parcel *parcel.Client
 }
 
 // Initialize the client
 func (a *API) Init(apiKey string, apiSecret string) {
 	a.Parcel = parcel.New(apiKey, apiSecret)
-	a.Method = method.New(apiKey, apiSecret)
-	a.Sender = sender.New(apiKey, apiSecret)
-	a.ServicePoint = servicepoint.New(apiKey, apiSecret)
-	a.Integration = integration.New(apiKey, apiSecret)
 }
